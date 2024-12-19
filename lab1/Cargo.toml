@@ -1,0 +1,36 @@
+[workspace]
+resolver = "2"
+members = [
+    "mr_common",
+    "mr_master", "mr_tests",
+    "mr_wc",
+    "mr_worker"
+]
+
+[workspace.dependencies]
+# Async
+futures = "0.3.31"
+tokio = { version = "1.42.0", features = ["full"]}
+
+# RPC
+tarpc = { version = "0.35", features = ["full"] }
+
+# Error handling
+anyhow = "1.0.94"
+
+# Logging
+log = "0.4.22"
+env_logger = "0.11.5"
+
+# Serialization
+serde = { version = "1.0.215", features = ["derive"] }
+uuid = { version = "1.11.0", features = ["v4", "serde"] }
+serde_json = "1.0.133"
+
+
+# Dynamic loading
+libloading = "0.8.6"
+
+# CLI
+clap = { version = "4.5.23", features = ["derive"]}
+

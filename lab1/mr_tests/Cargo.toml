@@ -1,0 +1,13 @@
+[package]
+name = "mr_tests"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow.workspace = true
+tokio.workspace = true
+env_logger.workspace = true
+futures.workspace = true
+
+mr_master = { path = "../mr_master" }
+mr_worker = { path = "../mr_worker" }
