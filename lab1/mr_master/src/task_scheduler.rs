@@ -1,8 +1,6 @@
-use std::fs::File;
-use std::io::BufReader;
 use crate::server::Services;
 use log::info;
-use mr_common::{KeyValue, Task, TaskKind, TaskState};
+use mr_common::{Task, TaskKind, TaskState};
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::mpsc::Sender;
