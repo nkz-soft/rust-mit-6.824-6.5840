@@ -25,7 +25,7 @@ impl TaskService {
         }
     }
 
-    pub async fn get_tasks_by_filter<P>(&self,  mut predicate: P) -> Vec<Task>
+    pub async fn get_tasks_by_filter<P>(&self, mut predicate: P) -> Vec<Task>
     where
         P: FnMut(&Task) -> bool,
     {
