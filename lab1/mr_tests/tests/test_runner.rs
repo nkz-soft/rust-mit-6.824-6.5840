@@ -2,7 +2,6 @@ use std::time::Duration;
 use tokio::task;
 use tokio::time::interval;
 
-
 fn get_ext() -> &'static str {
     if cfg!(windows) {
         return "dll";
