@@ -1,4 +1,4 @@
-mod args;
+pub mod args;
 mod handler;
 mod server;
 mod task_scheduler;
@@ -27,8 +27,13 @@ use tokio::task::AbortHandle;
 async fn spawn(fut: impl Future<Output = ()> + Send + 'static) {
     tokio::spawn(fut);
 }
+
 pub async fn run() -> anyhow::Result<()> {
     let args = args::Args::parse();
+    run_with_args(args).await
+}
+
+pub async fn run_with_args(args: args::Args) -> anyhow::Result<()> {
     let server_addr = (IpAddr::V4(Ipv4Addr::LOCALHOST), 5555);
 
     let (tx, mut rx) = mpsc::channel::<u8>(32);
