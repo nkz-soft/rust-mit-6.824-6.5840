@@ -52,11 +52,11 @@ impl TaskService {
             })
     }
 
-    pub async fn all_tasks<P>(&self, mut predicate: P) -> bool
+    pub async fn all_tasks<P>(&self, predicate: P) -> bool
     where
         P: FnMut(&Task) -> bool,
     {
         let tasks = self.tasks.lock().await;
-        tasks.iter().all(|task| predicate(task))
+        tasks.iter().all(predicate)
     }
 }

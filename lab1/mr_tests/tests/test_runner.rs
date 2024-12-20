@@ -21,7 +21,8 @@ async fn wc_test() -> anyhow::Result<()> {
     tasks.push(task::spawn(async {
         let args = mr_master::args::Args {
             path_to_files: "./../data".into(),
-            reduce_task_num: 10 };
+            reduce_task_num: 10,
+        };
         mr_master::run_with_args(args).await.unwrap();
     }));
 
