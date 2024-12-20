@@ -2,9 +2,16 @@ use std::time::Duration;
 use tokio::task;
 use tokio::time::interval;
 
+
+fn get_ext() -> &'static str {
+    if cfg!(windows) {
+        return "dll";
+    }
+    "so"
+}
 async fn run_worker() {
     let args = mr_worker::args::Args {
-        plugin: "./mr_wc.dll".into(),
+        plugin: format!("./mr_wc.{}", get_ext()).into(),
     };
     mr_worker::run_with_args(args).await.unwrap();
 }
