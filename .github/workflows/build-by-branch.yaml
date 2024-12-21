@@ -43,5 +43,5 @@ jobs:
       run: cargo clippy
       working-directory: ./lab1
     - name: Tests
-      run: cargo test  --test test_runner
+      run: cargo test --test test_runner --release
       working-directory: ./lab1
