@@ -2,15 +2,28 @@ use std::time::Duration;
 use tokio::task;
 use tokio::time::interval;
 
-fn get_ext() -> &'static str {
+fn get_wc_plugin_name() -> &'static str {
     if cfg!(windows) {
-        return "dll";
+        return "mr_wc.dll";
     }
-    "so"
+    "libmr_wc.so"
 }
+
+fn get_build_configuration() -> &'static str {
+    if cfg!(debug_assertions) {
+        return "debug";
+    }
+    "release"
+}
+
 async fn run_worker() {
     let args = mr_worker::args::Args {
-        plugin: format!("./mr_wc.{}", get_ext()).into(),
+        plugin: format!(
+            "./../target/{}/{}",
+            get_build_configuration(),
+            get_wc_plugin_name()
+        )
+        .into(),
     };
     mr_worker::run_with_args(args).await.unwrap();
 }
