@@ -1,0 +1,47 @@
+name: build-by-branch
+
+on:
+  push:
+    branches:
+    - main
+    - feature/*
+    - fix/*
+    paths-ignore:
+    - "**.md"
+  pull_request:
+   branches:
+   - main
+   paths-ignore:
+   - "**.md"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        toolchain: stable
+        components: rustfmt, clippy
+    - name: Check code style
+      run: cargo fmt -- --check
+      working-directory: ./lab1
+    - name: Build
+      run: cargo build --release --all-features
+      working-directory: ./lab1
+    - name: Check code
+      run: cargo clippy
+      working-directory: ./lab1
+    - name: Tests
+      run: cargo test --test test_runner --release
+      working-directory: ./lab1

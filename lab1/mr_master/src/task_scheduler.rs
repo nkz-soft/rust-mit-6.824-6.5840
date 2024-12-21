@@ -1,8 +1,6 @@
-use std::fs::File;
-use std::io::BufReader;
 use crate::server::Services;
 use log::info;
-use mr_common::{KeyValue, Task, TaskKind, TaskState};
+use mr_common::{Task, TaskKind, TaskState};
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::mpsc::Sender;
@@ -67,14 +65,17 @@ impl TaskScheduler {
             info!("Delete intermediate files");
             let tasks = services
                 .task_service()
-                .get_tasks_by_filter(|task| task.state == TaskState::Completed
-                    && task.kind == TaskKind::Reduce)
+                .get_tasks_by_filter(|task| {
+                    task.state == TaskState::Completed && task.kind == TaskKind::Reduce
+                })
                 .await;
 
             for task in tasks {
                 let task_id = task.parent.unwrap();
-                for reduce_task in  0..reduce_task_num {
-                    fs::remove_file(format!("mr-{task_id}-{reduce_task}")).await.unwrap();
+                for reduce_task in 0..reduce_task_num {
+                    fs::remove_file(format!("mr-{task_id}-{reduce_task}"))
+                        .await
+                        .unwrap();
                 }
             }
             info!("MapReduce phase finished");

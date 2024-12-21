@@ -25,7 +25,7 @@ impl TaskService {
         }
     }
 
-    pub async fn get_tasks_by_filter<P>(&self,  mut predicate: P) -> Vec<Task>
+    pub async fn get_tasks_by_filter<P>(&self, mut predicate: P) -> Vec<Task>
     where
         P: FnMut(&Task) -> bool,
     {
@@ -52,11 +52,11 @@ impl TaskService {
             })
     }
 
-    pub async fn all_tasks<P>(&self, mut predicate: P) -> bool
+    pub async fn all_tasks<P>(&self, predicate: P) -> bool
     where
         P: FnMut(&Task) -> bool,
     {
         let tasks = self.tasks.lock().await;
-        tasks.iter().all(|task| predicate(task))
+        tasks.iter().all(predicate)
     }
 }

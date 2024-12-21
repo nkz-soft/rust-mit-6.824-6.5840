@@ -1,4 +1,4 @@
-mod args;
+pub mod args;
 mod heartbeat;
 mod plugin_holder;
 
@@ -14,8 +14,13 @@ use tarpc::tokio_serde::formats::Json;
 use tarpc::{client, context};
 use tokio::time::sleep;
 use uuid::Uuid;
+
 pub async fn run() -> anyhow::Result<()> {
     let args = args::Args::parse();
+    run_with_args(args).await
+}
+
+pub async fn run_with_args(args: args::Args) -> anyhow::Result<()> {
     let server_addr = (IpAddr::V4(Ipv4Addr::LOCALHOST), 5555);
 
     let mut transport = tarpc::serde_transport::tcp::connect(server_addr, Json::default);
@@ -27,6 +32,8 @@ pub async fn run() -> anyhow::Result<()> {
 
     info!("Starting worker with id {}", worker_id);
     let configuration = client.register(context::current(), worker_id).await?;
+
+    info!("with configuration {:#?}", configuration);
 
     Heartbeat::start(Arc::from(client.clone()), worker_id).await;
 

@@ -1,3 +1,4 @@
+use anyhow::Context;
 use log::info;
 use mr_common::plugin::Plugin;
 use mr_common::{Configuration, KeyValue, Task};
@@ -25,10 +26,14 @@ impl PluginHolder {
 
     pub unsafe fn map(&self, task: &Task, configuration: &Configuration) -> anyhow::Result<()> {
         info!("Starting map for task {}", task.id);
-        let content = std::fs::read_to_string(task.file.as_ref().unwrap())?;
-        let kv_list = self
-            .load_plugin()?
-            .map(task.file.as_ref().unwrap(), &content);
+
+        let file_name = task.file.as_ref().context("File name is not set")?;
+
+        let mut full_path = configuration.path_to_files().clone();
+        full_path = full_path.join(file_name);
+
+        let content = std::fs::read_to_string(full_path)?;
+        let kv_list = self.load_plugin()?.map(file_name, &content);
 
         let task_id = task.id;
         let reduce_task_num = configuration.reduce_task_num() as usize;
@@ -56,7 +61,8 @@ impl PluginHolder {
     pub unsafe fn reduce(&self, task: &Task, configuration: &Configuration) -> anyhow::Result<()> {
         info!("Starting reduce for task {}", task.id);
 
-        let task_id = task.parent.unwrap();
+        let task_id = task.parent.context("Parent task is not set")?;
+
         let reduce_task_num = configuration.reduce_task_num() as usize;
 
         let mut intermediate_key_values: HashMap<String, Vec<String>> = HashMap::new();
@@ -84,7 +90,10 @@ impl PluginHolder {
         let mut writer = BufWriter::new(file);
 
         for key in sorted_keys {
-            let kv_list = intermediate_key_values.get(&key).unwrap();
+            let kv_list = intermediate_key_values
+                .get(&key)
+                .context("Key is not found")?;
+
             let key_len = self.load_plugin()?.reduce(&key.clone(), kv_list.clone());
             writeln!(writer, "{} {}", key, key_len)?;
             writer.flush()?;

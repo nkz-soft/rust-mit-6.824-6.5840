@@ -502,6 +502,7 @@ dependencies = [
  "anyhow",
  "env_logger",
  "futures",
+ "log",
  "mr_master",
  "mr_worker",
  "tokio",

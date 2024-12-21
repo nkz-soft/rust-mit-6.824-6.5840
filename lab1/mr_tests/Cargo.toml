@@ -8,6 +8,7 @@ anyhow.workspace = true
 tokio.workspace = true
 env_logger.workspace = true
 futures.workspace = true
+log.workspace = true
 
 mr_master = { path = "../mr_master" }
 mr_worker = { path = "../mr_worker" }

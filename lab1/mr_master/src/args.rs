@@ -6,11 +6,11 @@ use std::path::PathBuf;
 pub struct Args {
     /// Path to the files
     #[arg(default_value = ".", short = 'f', long = "file-path")]
-    path_to_files: PathBuf,
+    pub path_to_files: PathBuf,
 
     /// Number of reduce tasks
     #[arg(default_value = "10", short = 'r', long = "reduce-task-num")]
-    reduce_task_num: u32,
+    pub reduce_task_num: u32,
 }
 
 impl From<Args> for Configuration {
