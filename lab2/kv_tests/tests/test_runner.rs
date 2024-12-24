@@ -1,7 +1,7 @@
+use kv_clerk::Clerk;
 use std::time::Duration;
 use tokio::task;
 use tokio::time::interval;
-use kv_clerk::Clerk;
 
 #[tokio::test]
 async fn one_client_test() -> anyhow::Result<()> {
@@ -18,7 +18,7 @@ async fn one_client_test() -> anyhow::Result<()> {
 
     interval.tick().await;
 
-    let clerk =  Clerk::new().await?;
+    let clerk = Clerk::new().await?;
     let value = clerk.put("key1", "value1").await?;
     assert_eq!(value, "value1");
     let value = clerk.put("key2", "value2").await?;

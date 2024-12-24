@@ -2,16 +2,16 @@ mod handler;
 mod server;
 mod storage;
 
+use crate::server::Server;
+use futures::{future, StreamExt};
+use kv_common::KvServer;
+use log::info;
 use std::future::Future;
 use std::net::{IpAddr, Ipv4Addr};
-use futures::{future, StreamExt};
-use log::info;
-use tarpc::server::incoming::Incoming;
-use tarpc::tokio_serde::formats::Json;
 use tarpc::server as tarpc_server;
+use tarpc::server::incoming::Incoming;
 use tarpc::server::Channel;
-use kv_common::KvServer;
-use crate::server::{Server};
+use tarpc::tokio_serde::formats::Json;
 
 async fn spawn(fut: impl Future<Output = ()> + Send + 'static) {
     tokio::spawn(fut);
@@ -41,6 +41,7 @@ pub async fn run() -> anyhow::Result<()> {
             .buffer_unordered(10)
             .for_each(|_| async {})
             .await;
-    }).await?;
+    })
+    .await?;
     Ok(())
 }
