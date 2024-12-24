@@ -11,6 +11,3 @@ which can be used to process data in parallel on a cluster of machines.
     ```bash
     git clone git://g.csail.mit.edu/6.5840-golabs-2024
     ```
-
-
-

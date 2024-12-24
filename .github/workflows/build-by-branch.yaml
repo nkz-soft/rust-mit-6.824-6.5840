@@ -33,15 +33,29 @@ jobs:
       with:
         toolchain: stable
         components: rustfmt, clippy
-    - name: Check code style
+
+    - name: LAB1 Check code style
       run: cargo fmt -- --check
       working-directory: ./lab1
-    - name: Build
+    - name: LAB1 Build
       run: cargo build --release --all-features
       working-directory: ./lab1
-    - name: Check code
+    - name: LAB1 Check code
       run: cargo clippy
       working-directory: ./lab1
-    - name: Tests
+    - name: LAB1 Tests
       run: cargo test --test test_runner --release
       working-directory: ./lab1
+
+    - name: LAB2 Check code style
+      run: cargo fmt -- --check
+      working-directory: ./lab2
+    - name: LAB2 Build
+      run: cargo build --release --all-features
+      working-directory: ./lab2
+    - name: LAB2 Check code
+      run: cargo clippy
+      working-directory: ./lab2
+    - name: LAB2 Tests
+      run: cargo test --test test_runner --release
+      working-directory: ./lab2
