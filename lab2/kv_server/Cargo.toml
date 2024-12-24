@@ -1,0 +1,14 @@
+[package]
+name = "kv_server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tarpc.workspace = true
+tokio.workspace = true
+anyhow.workspace = true
+futures.workspace = true
+log.workspace = true
+env_logger.workspace = true
+
+kv_common = { path = "../kv_common" }
