@@ -102,7 +102,6 @@ async fn many_clients_test() {
 #[tokio::test]
 #[ignore]
 async fn idempotency_key_one_client_test() -> anyhow::Result<()> {
-
     let mut interval = interval(Duration::from_secs(1));
     interval.tick().await;
 
@@ -114,16 +113,22 @@ async fn idempotency_key_one_client_test() -> anyhow::Result<()> {
     let first_idempotency_key = Some(Uuid::new_v4());
 
     let clerk = Clerk::new().await?;
-    let value = clerk.put_with_idempotency("key1", "value1", first_idempotency_key).await?;
+    let value = clerk
+        .put_with_idempotency("key1", "value1", first_idempotency_key)
+        .await?;
     assert_eq!(value, "value1");
 
     let value = clerk.get("key1").await?;
     assert_eq!(value.unwrap(), "value1");
 
-    let value = clerk.put_with_idempotency("key1", "value1_2", first_idempotency_key).await?;
+    let value = clerk
+        .put_with_idempotency("key1", "value1_2", first_idempotency_key)
+        .await?;
     assert_eq!(value, "value1");
 
-    let value = clerk.append_with_idempotency("key1", "value1_3", first_idempotency_key).await?;
+    let value = clerk
+        .append_with_idempotency("key1", "value1_3", first_idempotency_key)
+        .await?;
     assert_eq!(value, "value1");
 
     Ok(())
