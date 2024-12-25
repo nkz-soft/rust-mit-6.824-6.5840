@@ -1,10 +1,11 @@
 [package]
 name = "kv_clerk"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 
 [dependencies]
 anyhow.workspace = true
 tarpc.workspace = true
+uuid.workspace = true
 
 kv_common = { path = "../kv_common" }

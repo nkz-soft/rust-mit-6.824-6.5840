@@ -11,3 +11,4 @@ futures.workspace = true
 
 kv_server = { path = "../kv_server" }
 kv_clerk = { path = "../kv_clerk" }
+uuid = { version = "1.11.0", features = ["v4"] }
