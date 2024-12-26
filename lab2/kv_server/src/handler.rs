@@ -44,3 +44,25 @@ impl KvServer for Server {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use std::sync::Arc;
+    use tarpc::context;
+    use crate::server::Services;
+    use super::*;
+
+    #[tokio::test]
+    async fn get_test() {
+        let server = Server::new(Arc::new(Services::new()));
+        let value = server.get(context::current(),"key".to_string()).await;
+        assert!(value.is_none());
+    }
+
+    #[tokio::test]
+    async fn put_test() {
+        let server = Server::new(Arc::new(Services::new()));
+        let value = server.put(context::current(),"key".to_string(), "value".to_string(), None).await;
+        assert_eq!(value, "value");
+    }
+}

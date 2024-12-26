@@ -31,3 +31,6 @@ libloading = "0.8.6"
 # CLI
 clap = { version = "4.5.23", features = ["derive"]}
 
+# Testing
+serial_test = "3.2.0"
+
