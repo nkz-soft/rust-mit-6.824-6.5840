@@ -1,16 +1,14 @@
-
 #[cfg(test)]
 mod tests {
-    use serial_test::serial;
     use futures::future;
     use kv_clerk::Clerk;
+
     use std::time::Duration;
     use tokio::sync::OnceCell;
     use tokio::task;
     use tokio::task::JoinHandle;
     use tokio::time::interval;
     use uuid::Uuid;
-    use log::info;
 
     static ONCE: OnceCell<JoinHandle<()>> = OnceCell::const_new();
 
@@ -36,7 +34,6 @@ mod tests {
     #[tokio::test]
     #[ignore]
     async fn one_client_test() -> anyhow::Result<()> {
-
         run_kv_server!();
 
         let clerk = Clerk::new().await?;
@@ -66,7 +63,6 @@ mod tests {
 
     #[tokio::test]
     async fn many_clients_test() {
-
         run_kv_server!();
 
         // I need to run this test 5 times asynchronously but the assert_eq! does not work
@@ -76,7 +72,10 @@ mod tests {
             tasks.push(task::spawn(async move {
                 let clerk = Clerk::new().await.unwrap();
                 let value = clerk
-                    .put(format!("many_clients_key{}", i).as_str(), format!("value{}", i).as_str())
+                    .put(
+                        format!("many_clients_key{}", i).as_str(),
+                        format!("value{}", i).as_str(),
+                    )
                     .await
                     .unwrap();
                 assert_eq!(value, format!("value{}", i));
@@ -89,7 +88,10 @@ mod tests {
                 assert_eq!(value, format!("value{}", i));
 
                 let value = clerk
-                    .append(format!("many_clients_key{}", i).as_str(), format!("value{}", i).as_str())
+                    .append(
+                        format!("many_clients_key{}", i).as_str(),
+                        format!("value{}", i).as_str(),
+                    )
                     .await
                     .unwrap();
                 assert_eq!(value, format!("value{}value{}", i, i));
@@ -108,14 +110,17 @@ mod tests {
 
     #[tokio::test]
     async fn idempotency_key_one_client_test() -> anyhow::Result<()> {
-
         run_kv_server!();
 
         let first_idempotency_key = Some(Uuid::new_v4());
 
         let clerk = Clerk::new().await?;
         let value = clerk
-            .put_with_idempotency("idempotency_key_one_client_key1", "value1", first_idempotency_key)
+            .put_with_idempotency(
+                "idempotency_key_one_client_key1",
+                "value1",
+                first_idempotency_key,
+            )
             .await?;
         assert_eq!(value, "value1");
 
@@ -123,12 +128,20 @@ mod tests {
         assert_eq!(value.unwrap(), "value1");
 
         let value = clerk
-            .put_with_idempotency("idempotency_key_one_client_key1", "value1_2", first_idempotency_key)
+            .put_with_idempotency(
+                "idempotency_key_one_client_key1",
+                "value1_2",
+                first_idempotency_key,
+            )
             .await?;
         assert_eq!(value, "value1");
 
         let value = clerk
-            .append_with_idempotency("idempotency_key_one_client_key1", "value1_3", first_idempotency_key)
+            .append_with_idempotency(
+                "idempotency_key_one_client_key1",
+                "value1_3",
+                first_idempotency_key,
+            )
             .await?;
         assert_eq!(value, "value1");
 

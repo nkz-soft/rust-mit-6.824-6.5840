@@ -11,6 +11,5 @@ futures.workspace = true
 log.workspace = true
 env_logger.workspace = true
 uuid.workspace = true
-serial_test.workspace = true
 
 kv_common = { path = "../kv_common" }
