@@ -3,6 +3,7 @@ use kv_common::KvServerClient;
 use std::net::{IpAddr, Ipv4Addr};
 use tarpc::tokio_serde::formats::Json;
 use tarpc::{client, context};
+use uuid::Uuid;
 
 pub struct Clerk {
     client: KvServerClient,
@@ -26,16 +27,43 @@ impl Clerk {
     }
 
     pub async fn put(&self, key: &str, value: &str) -> anyhow::Result<String> {
+        self.put_with_idempotency(key, value, None).await
+    }
+
+    pub async fn put_with_idempotency(
+        &self,
+        key: &str,
+        value: &str,
+        idempotency_key: Option<Uuid>,
+    ) -> anyhow::Result<String> {
         self.client
-            .put(context::current(), key.to_owned(), value.to_owned())
+            .put(
+                context::current(),
+                key.to_owned(),
+                value.to_owned(),
+                idempotency_key,
+            )
             .await
             .map_err(|e| anyhow::anyhow!("{}", e))
             .context("Failed to put key")
     }
-
     pub async fn append(&self, key: &str, value: &str) -> anyhow::Result<String> {
+        self.append_with_idempotency(key, value, None).await
+    }
+
+    pub async fn append_with_idempotency(
+        &self,
+        key: &str,
+        value: &str,
+        idempotency_key: Option<Uuid>,
+    ) -> anyhow::Result<String> {
         self.client
-            .append(context::current(), key.to_owned(), value.to_owned())
+            .append(
+                context::current(),
+                key.to_owned(),
+                value.to_owned(),
+                idempotency_key,
+            )
             .await
             .map_err(|e| anyhow::anyhow!("{}", e))
             .context("Failed to append key")

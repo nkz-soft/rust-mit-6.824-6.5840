@@ -8,6 +8,9 @@ anyhow.workspace = true
 tokio.workspace = true
 env_logger.workspace = true
 futures.workspace = true
+serial_test.workspace = true
+log.workspace = true
+uuid.workspace = true
 
 kv_server = { path = "../kv_server" }
 kv_clerk = { path = "../kv_clerk" }

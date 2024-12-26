@@ -24,9 +24,11 @@ jobs:
       uses: actions/cache@v4
       with:
         path: |
-          ~/.cargo/registry
-          ~/.cargo/git
-          target
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
     - name: Install Rust toolchain
       uses: dtolnay/rust-toolchain@stable
@@ -56,6 +58,9 @@ jobs:
     - name: LAB2 Check code
       run: cargo clippy
       working-directory: ./lab2
-    - name: LAB2 Tests
-      run: cargo test --test test_runner --release
+    - name: LAB2 Unit Tests
+      run: cargo test --release
+      working-directory: ./lab2
+    - name: LAB2 Integration Tests
+      run: cargo test --release
       working-directory: ./lab2

@@ -1,6 +1,9 @@
+#![allow(dead_code)]
 mod handler;
+mod idempotency_key_cleaner;
+mod idempotency_key_storage;
+mod kv_storage;
 mod server;
-mod storage;
 
 use kv_server::run;
 

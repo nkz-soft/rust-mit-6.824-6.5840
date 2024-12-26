@@ -1,6 +1,6 @@
 [package]
 name = "kv_server"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 
 [dependencies]
@@ -10,5 +10,6 @@ anyhow.workspace = true
 futures.workspace = true
 log.workspace = true
 env_logger.workspace = true
+uuid.workspace = true
 
 kv_common = { path = "../kv_common" }
